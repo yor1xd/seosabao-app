@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./prisma/client"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String   @unique
+  phoneNumber String
+  password    String
+  role        Role     @default(USER)
+  createdAt   DateTime @default(now())
+  updateAt    DateTime @updatedAt
+
+  machines    Machine[]     @relation(fields: [], references: [])
+  queue       Queue[]       @relation(fields: [], references: [])
+  washHistory WashHistory[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Machine {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  status       MachineStatus @default(LIVRE)
+  userId       String?       @db.ObjectId
+  user         User?         @relation(fields: [userId], references: [id])
+  startedAt    DateTime?
+  estimatedEnd DateTime?
+  updatedAt    DateTime      @updatedAt
+
+  washHistory WashHistory[]
+}
+
+enum MachineStatus {
+  LIVRE
+  EM_USO
+}
+
+model Queue {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model WashHistory {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String @db.ObjectId
+  machineId String @db.ObjectId
+
+  user    User    @relation(fields: [userId], references: [id])
+  machine Machine @relation(fields: [machineId], references: [id])
+
+  startedAt DateTime
+  endedAt   DateTime
+}
