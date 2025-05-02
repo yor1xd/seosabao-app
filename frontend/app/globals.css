@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer base {
+  button {
+    @apply outline-foreground cursor-pointer;
+  }
+
+  h1 {
+    @apply text-black text-3xl;
+  }
+}
