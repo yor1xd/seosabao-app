@@ -1,7 +1,5 @@
 "use client"
 
-import { useState } from "react";
-
 const ProgressBar = () => {
     return (
         <div className="relative flex flex-col justify-evenly gap-y-2">
