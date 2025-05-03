@@ -5,10 +5,6 @@ import { useState } from "react";
 const ProgressBar = () => {
     const [progress, setProgress] = useState(0);
 
-    function updateProgress() {
-        setProgress(progress + 10);
-        
-    }
     return (
         <div className="relative flex flex-col justify-evenly gap-y-2">
             <p>Progresso atual</p>
