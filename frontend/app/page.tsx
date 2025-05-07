@@ -3,6 +3,7 @@ import ProgressBar from "./components/progressbar";
 import Notification from "./components/notification";
 import Waitlist from "./components/waitlist";
 import Status from "./components/status";
+import Login from "./components/login";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <ProgressBar/>
       <Waitlist/>
       <Notification/>
+      <Login/>
 
     </div>
   );
