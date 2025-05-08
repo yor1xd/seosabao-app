@@ -29,6 +29,8 @@ const Waitlist = () => {
             })
 
         })
+
+        console.log(res);
         
     }
 
@@ -37,6 +39,7 @@ const Waitlist = () => {
         const data = await res.json();
         
         setQueue(data);
+        console.log(res);
     }
 
     useEffect(() => {

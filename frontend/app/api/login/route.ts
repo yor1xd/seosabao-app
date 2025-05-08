@@ -1,6 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
 
 export async function POST(request:Request) {
     const { email, password } = await request.json();
@@ -17,7 +18,7 @@ export async function POST(request:Request) {
     const validatedPassword = await bcrypt.compare(password, result[0].password);
 
     if(!validatedPassword){
-         return Response.json({"error": "Username or password incorrect."}, {status: 400});
+         return Response.json({"error": "Username or password incorrect."}, {status: 401});
     }
 
     const token = jwt.sign({
@@ -25,6 +26,16 @@ export async function POST(request:Request) {
         email: result[0].email
     }, process.env.JWT_PASS as string);
 
-    return Response.json({ token: token }, { status: 200 });
+    const response = NextResponse.json({success: true});
+    response.cookies.set({
+        name: "token",
+        value: token,
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        maxAge: 60*60*24,
+    });
+
+    return response;
 
 }
